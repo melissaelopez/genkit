@@ -23,10 +23,9 @@ import {
 } from '@genkit-ai/core';
 import { lookupAction } from '@genkit-ai/core/registry';
 import { toJsonSchema, validateSchema } from '@genkit-ai/core/schema';
-import untruncateJson from 'untruncate-json';
 import { z } from 'zod';
 import { DocumentData } from './document.js';
-import { extractJson } from './extract.js';
+import { extractAndUntruncateJson, extractJson } from './extract.js';
 import {
   CandidateData,
   GenerateRequest,
@@ -415,7 +414,7 @@ export class GenerateResponseChunk<T = unknown>
     const accumulatedText = this.accumulatedChunks
       .map((chunk) => chunk.content.map((part) => part.text || '').join(''))
       .join('');
-    return extractJson(untruncateJson(accumulatedText));
+    return extractAndUntruncateJson(accumulatedText);
   }
 
   toJSON(): GenerateResponseChunkData {
