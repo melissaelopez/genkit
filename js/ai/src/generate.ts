@@ -23,6 +23,7 @@ import {
 } from '@genkit-ai/core';
 import { lookupAction } from '@genkit-ai/core/registry';
 import { toJsonSchema, validateSchema } from '@genkit-ai/core/schema';
+import untruncateJson from 'untruncate-json';
 import { z } from 'zod';
 import { DocumentData } from './document.js';
 import { extractJson } from './extract.js';
@@ -357,11 +358,17 @@ export class GenerateResponseChunk<T = unknown>
   content: Part[];
   /** Custom model-specific data for this chunk. */
   custom?: unknown;
+  /** Accumulated chunks for partial output extraction. */
+  accumulatedChunks?: GenerateResponseChunkData[];
 
-  constructor(data: GenerateResponseChunkData) {
+  constructor(
+    data: GenerateResponseChunkData,
+    accumulatedChunks?: GenerateResponseChunkData[]
+  ) {
     this.index = data.index;
     this.content = data.content || [];
     this.custom = data.custom;
+    this.accumulatedChunks = accumulatedChunks;
   }
 
   /**
@@ -397,6 +404,18 @@ export class GenerateResponseChunk<T = unknown>
     return this.content.filter(
       (part) => !!part.toolRequest
     ) as ToolRequestPart[];
+  }
+
+  /**
+   * Attempts to extract the longest valid JSON substring from the accumulated chunks.
+   * @returns The longest valid JSON substring found in the accumulated chunks.
+   */
+  output(): T | null {
+    if (!this.accumulatedChunks) return null;
+    const accumulatedText = this.accumulatedChunks
+      .map((chunk) => chunk.content.map((part) => part.text || '').join(''))
+      .join('');
+    return extractJson(untruncateJson(accumulatedText));
   }
 
   toJSON(): GenerateResponseChunkData {
@@ -583,6 +602,7 @@ export class NoValidCandidatesError extends GenkitError {
  * @param options The options for this generation request.
  * @returns The generated response based on the provided parameters.
  */
+
 export async function generate<
   O extends z.ZodTypeAny = z.ZodTypeAny,
   CustomOptions extends z.ZodTypeAny = typeof GenerationCommonConfigSchema,
@@ -614,10 +634,20 @@ export async function generate<
     resolvedOptions,
     request
   );
+
+  const accumulatedChunks: GenerateResponseChunkData[] = [];
+
   const response = await runWithStreamingCallback(
     resolvedOptions.streamingCallback
-      ? (chunk: GenerateResponseChunkData) =>
-          resolvedOptions.streamingCallback!(new GenerateResponseChunk(chunk))
+      ? (chunk: GenerateResponseChunkData) => {
+          // Store accumulated chunk data
+          accumulatedChunks.push(chunk);
+          if (resolvedOptions.streamingCallback) {
+            resolvedOptions.streamingCallback!(
+              new GenerateResponseChunk(chunk, accumulatedChunks)
+            );
+          }
+        }
       : undefined,
     async () => new GenerateResponse<z.infer<O>>(await model(request), request)
   );
