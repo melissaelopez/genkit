@@ -15,6 +15,7 @@
  */
 
 import { ModelReference } from '@genkit-ai/ai/model';
+import { Document } from '@genkit-ai/ai/retriever';
 import { genkitPlugin, Plugin } from '@genkit-ai/core';
 import { VertexAI } from '@google-cloud/vertexai';
 import { GoogleAuth, GoogleAuthOptions } from 'google-auth-library';
@@ -52,7 +53,6 @@ import {
   SUPPORTED_GEMINI_MODELS,
 } from './gemini.js';
 import { imagen2, imagen2Model } from './imagen.js';
-
 export {
   claude3Haiku,
   claude3Opus,
@@ -86,6 +86,13 @@ export interface PluginOptions {
     metrics: VertexAIEvaluationMetric[];
   };
   modelGardenModels?: ModelReference<any>[];
+  vectorSearchOptions?: {
+    documentRetriever: (docIds: string[]) => Promise<Document[]>;
+    documentIndexer: (docs: Document[]) => Promise<void>;
+    documentIdField: string;
+    index: string;
+    publicEndpoint: string;
+  };
 }
 
 /**

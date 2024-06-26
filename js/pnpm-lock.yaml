@@ -594,6 +594,9 @@ importers:
       '@genkit-ai/flow':
         specifier: workspace:*
         version: link:../../flow
+      '@google-cloud/aiplatform':
+        specifier: ^3.23.0
+        version: 3.23.0(encoding@0.1.13)
       '@google-cloud/vertexai':
         specifier: ^1.1.0
         version: 1.1.0(encoding@0.1.13)
@@ -1370,6 +1373,10 @@ packages:
 
   '@firebase/util@1.9.5':
     resolution: {integrity: sha512-PP4pAFISDxsf70l3pEy34Mf3GkkUcVQ3MdKp6aSVb7tcpfUQxnsdV7twDd8EkfB6zZylH6wpUAoangQDmCUMqw==}
+
+  '@google-cloud/aiplatform@3.23.0':
+    resolution: {integrity: sha512-FtnWppxJJLBA7yfhTqjPSiNx47e3BmJp510i9OGM0Ngv67Xbv6jb6sp6sIXMegLPCqGrMU8tPmAy/E0vGCh/Zw==}
+    engines: {node: '>=14.0.0'}
 
   '@google-cloud/common@5.0.1':
     resolution: {integrity: sha512-7NBC5vD0au75nkctVs2vEGpdUPFs1BaHTMpeI+RVEgQSMe5/wEU6dx9p0fmZA0bj4HgdpobMKeegOcLUiEoxng==}
@@ -3808,6 +3815,10 @@ packages:
     resolution: {integrity: sha512-1ulHeNPp6k/LD8H91o7VYFBng5i1BDE7HoKxVbZiGFidS1Rj65qcywLxX+pVfAPoQJEjRdvKcusKwOupHCVOVQ==}
     engines: {node: '>= 12.0.0'}
 
+  long@1.1.5:
+    resolution: {integrity: sha512-TU6nAF5SdasnTr28c7e74P4Crbn9o3/zwo1pM22Wvg2i2vlZ4Eelxwu4QT7j21z0sDBlJDEnEZjXTZg2J8WJrg==}
+    engines: {node: '>=0.6'}
+
   long@5.2.3:
     resolution: {integrity: sha512-lcHwpNoggQTObv5apGNCTdJrO69eHOZMi4BNC+rTLER8iHAqGrUVeLh/irVIM7zTw2bOXA8T6uNPeujwOLg/2Q==}
 
@@ -4245,6 +4256,9 @@ packages:
   proto3-json-serializer@2.0.2:
     resolution: {integrity: sha512-SAzp/O4Yh02jGdRc+uIrGoe87dkN/XtwxfZ4ZyafJHymd79ozp5VG5nyZ7ygqPM5+cpLDjjGnYFUkngonyDPOQ==}
     engines: {node: '>=14.0.0'}
+
+  protobuf.js@1.1.2:
+    resolution: {integrity: sha512-USO7Xus/pzPw549M1TguiyoOrKEhm9VMXv+CkDufcjMC8Rd7EPbxeRQPEjCV8ua1tm0k7z9xHkogcxovZogWdA==}
 
   protobufjs@7.2.6:
     resolution: {integrity: sha512-dgJaEDDL6x8ASUZ1YqWciTRrdOuYNzoOf27oHNfdyvKqHr5i0FV7FSLU+aIeFjyFgVxrpTOtQUi0BLLBymZaBw==}
@@ -5008,6 +5022,14 @@ snapshots:
     dependencies:
       tslib: 2.6.2
 
+  '@google-cloud/aiplatform@3.23.0(encoding@0.1.13)':
+    dependencies:
+      google-gax: 4.3.7(encoding@0.1.13)
+      protobuf.js: 1.1.2
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+
   '@google-cloud/common@5.0.1(encoding@0.1.13)':
     dependencies:
       '@google-cloud/projectify': 4.0.0
@@ -5162,7 +5184,6 @@ snapshots:
     dependencies:
       '@grpc/proto-loader': 0.7.13
       '@js-sdsl/ordered-map': 4.4.2
-    optional: true
 
   '@grpc/grpc-js@1.10.4':
     dependencies:
@@ -5182,7 +5203,6 @@ snapshots:
       long: 5.2.3
       protobufjs: 7.3.2
       yargs: 17.7.2
-    optional: true
 
   '@hapi/b64@5.0.0':
     dependencies:
@@ -7219,7 +7239,6 @@ snapshots:
     transitivePeerDependencies:
       - encoding
       - supports-color
-    optional: true
 
   google-p12-pem@3.1.4:
     dependencies:
@@ -7747,6 +7766,8 @@ snapshots:
       safe-stable-stringify: 2.4.3
       triple-beam: 1.4.1
 
+  long@1.1.5: {}
+
   long@5.2.3: {}
 
   lru-cache@10.2.0: {}
@@ -8147,7 +8168,10 @@ snapshots:
   proto3-json-serializer@2.0.2:
     dependencies:
       protobufjs: 7.3.2
-    optional: true
+
+  protobuf.js@1.1.2:
+    dependencies:
+      long: 1.1.5
 
   protobufjs@7.2.6:
     dependencies:
@@ -8178,7 +8202,6 @@ snapshots:
       '@protobufjs/utf8': 1.1.0
       '@types/node': 20.11.30
       long: 5.2.3
-    optional: true
 
   proxy-addr@2.0.7:
     dependencies:
