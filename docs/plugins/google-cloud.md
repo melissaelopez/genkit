@@ -96,6 +96,8 @@ googleCloud({
 
 This option will force Genkit to export telemetry and log data when running in the `dev` environment (e.g. locally).
 
+> Tip: To get started and quickly send your first event, enable telemetry export for local runs with `forceDevExport: true`.
+
 > Note: When running locally, internal telemetry buffers may not fully flush prior to the process exiting, resulting in an incomplete telemetry export.
 
 #### sampler
