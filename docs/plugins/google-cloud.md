@@ -66,6 +66,8 @@ The `googleCloud()` plugin takes an optional configuration object:
 }
 ```
 
+> Note: When running locally, internal telemetry buffers may not fully flush prior to the process exiting, resulting in an incomplete telemetry export.
+
 ### projectId
 
 This option allows specifying the Google Cloud project ID explicitly. In most cases, this is unnecessary.
@@ -95,6 +97,8 @@ googleCloud({
 #### forceDevExport
 
 This option will force Genkit to export telemetry and log data when running in the `dev` environment (e.g. locally).
+
+> Tip: To get started and quickly send your first event, enable telemetry export for local runs with `forceDevExport: true`.
 
 > Note: When running locally, internal telemetry buffers may not fully flush prior to the process exiting, resulting in an incomplete telemetry export.
 
